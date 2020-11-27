@@ -44,6 +44,9 @@ class HelloWorldClient {
   private final ManagedChannel channel;
   private final GreeterGrpc.GreeterBlockingStub blockingStub;
 
+  private final String host;
+  private final int port;
+
   private HelloWorldClient(String host, int port, TlsContext tls) throws SSLException {
     this.eventLoopGroup = Netty.newWorkerEventLoopGroup();
     this.channel =
@@ -53,6 +56,8 @@ class HelloWorldClient {
             .sslContext(tls.toClientContext())
             .build();
     this.blockingStub = GreeterGrpc.newBlockingStub(channel);
+    this.host = host;
+    this.port = port;
   }
 
   private void shutdown() throws InterruptedException {
@@ -62,6 +67,8 @@ class HelloWorldClient {
 
   private String greet(int i) {
     try {
+      LOGGER.warn("Calling: {}:{}", host, port);
+
       final HelloRequest request = HelloRequest.newBuilder().setName("world " + i).build();
       return blockingStub.sayHello(request).getMessage();
     } catch (StatusRuntimeException e) {
@@ -77,25 +84,25 @@ class HelloWorldClient {
       name = {"-h", "--hostname"},
       description = "the hostname of the gRPC server"
     )
-    private String hostname = "localhost";
+    private String hostname = "local.suslovd.ru";
 
     @Option(
       name = {"-p", "--port"},
       description = "the port of the gRPC server"
     )
-    private int port = 50051;
+    private int port = 50054;
 
     @Option(
       name = {"-n", "--requests"},
       description = "the number of requests to make"
     )
-    private int requests = 1_000_000;
+    private int requests = 1;
 
     @Option(
       name = {"-c", "--threads"},
       description = "the number of threads to use"
     )
-    private int threads = 10;
+    private int threads = 1;
 
     @Option(name = "--ca-certs")
     private String trustedCertsPath = "cert.crt";

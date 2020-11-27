@@ -15,8 +15,9 @@
 
 <configuration>
   <appender class="ch.qos.logback.core.ConsoleAppender" name="console">
-    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-      <jsonGeneratorDecorator class="com.codahale.grpcproxy.util.PrettyPrintingDecorator"/>
+    <encoder>
+      <pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+      <outputPatternAsHeader>true</outputPatternAsHeader>
     </encoder>
   </appender>
   <appender class="ch.qos.logback.classic.AsyncAppender" name="console-async">

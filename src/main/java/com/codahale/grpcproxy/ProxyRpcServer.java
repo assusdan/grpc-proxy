@@ -80,13 +80,13 @@ class ProxyRpcServer {
       name = {"-p", "--port"},
       description = "the port to listen on"
     )
-    private int port = 50051;
+    private int port = 50053;
 
     @Option(
       name = {"-u", "--upstream"},
       description = "the URL of the upstream HTTP server"
     )
-    private String upstream = "http://localhost:8080/grpc";
+    private String upstream = "http://local.suslovd.ru:8080/grpc";
 
     @Option(name = "--ca-certs")
     private String trustedCertsPath = "cert.crt";

@@ -14,6 +14,7 @@
 
 package com.codahale.grpcproxy;
 
+import com.codahale.grpcproxy.dc.HttpTransportInterceptor;
 import com.codahale.grpcproxy.util.Netty;
 import com.codahale.grpcproxy.util.StatsTracerFactory;
 import com.codahale.grpcproxy.util.TlsContext;
@@ -47,6 +48,7 @@ class HelloWorldServer {
             .channelType(Netty.serverChannelType())
             .addStreamTracerFactory(stats)
             .sslContext(tls.toServerContext())
+            .intercept(new HttpTransportInterceptor())
             .addService(new GreeterService())
             .build();
   }
@@ -75,7 +77,7 @@ class HelloWorldServer {
       name = {"-p", "--port"},
       description = "the port to listen on"
     )
-    private int port = 50051;
+    private int port = 50052;
 
     @Option(name = "--ca-certs")
     private String trustedCertsPath = "cert.crt";
